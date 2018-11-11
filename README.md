@@ -1,2 +1,2 @@
-# tiff_for_imagej
+# tiff_imagej
 write tiff for imagej
