@@ -6,4 +6,4 @@ This source code is licensed under [the Unlicens](http://unlicense.org/).
 
 You can used all or part of this source code without any constraint.
 
-[日本語REAME](./README_JA.md)
+[日本語REAME](https://github.com/for-tokyo/tiff_imagej/README_JA.md)
