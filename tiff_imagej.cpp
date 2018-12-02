@@ -1,3 +1,8 @@
+/*
+	Copyright 2018-, Yuki TOKYO (@for-tokyo)
+	Licensed under Unlicense (http://unlicense.org)
+*/
+
 #include <tiffio.h>
 #include <stdlib.h>
 #include <memory.h>
