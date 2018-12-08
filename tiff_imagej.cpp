@@ -34,7 +34,7 @@ static int get_bytes_per_channel(int type)
 	return 1;
 }
 
-static int _write_tiff_onepage(TIFF *tif, void *data, int width, int height, int nChannels,
+static int _write_tiff_onepage(TIFF *tif, const void *data, int width, int height, int nChannels,
 							   int type)
 {
 	int row_strip;
@@ -110,7 +110,7 @@ static int _write_tiff_onepage(TIFF *tif, void *data, int width, int height, int
 
 //BGR interleaving to RGB interleaving
 template<typename T>
-static T *create_rgb_data(void *src, int width, int height)
+static T *create_rgb_data(const void *src, int width, int height)
 {
 	T *srcT = (T*)src;
 	T *dst = (T*)malloc(sizeof(T)*width*height*3);
@@ -128,7 +128,7 @@ static T *create_rgb_data(void *src, int width, int height)
 }
 
 //BGR interleaving to RGB interleaving
-static void *create_rgb_data(void *src, int width, int height, int type)
+static void *create_rgb_data(const void *src, int width, int height, int type)
 {
 	if (type == TI_8U)
 	{
@@ -155,7 +155,7 @@ static void *create_rgb_data(void *src, int width, int height, int type)
 }
 
 template<typename T>
-static T *create_one_channel_data(void *src, int width, int height, int nChannels, int c)
+static T *create_one_channel_data(const void *src, int width, int height, int nChannels, int c)
 {
 	T *srcT = (T*)src;
 	T *dst = (T*)malloc(sizeof(T)*width*height);
@@ -169,7 +169,7 @@ static T *create_one_channel_data(void *src, int width, int height, int nChannel
 	return dst;
 }
 
-static void *create_one_channel_data(void *src, int width, int height, int nChannels, int type, int c)
+static void *create_one_channel_data(const void *src, int width, int height, int nChannels, int type, int c)
 {
 	if (type == TI_8U)
 	{
@@ -197,7 +197,7 @@ static void *create_one_channel_data(void *src, int width, int height, int nChan
 
 //BGR interleaving to RGB separate (for Double)
 template<typename T>
-static T *create_separate_from_bgr(void *src, int width, int height)
+static T *create_separate_from_bgr(const void *src, int width, int height)
 {
 	T *srcT = (T*)src;
 	T *dst = (T*)malloc(sizeof(T)*width*height*3);
@@ -220,7 +220,7 @@ static T *create_separate_from_bgr(void *src, int width, int height)
 }
 
 template<typename T>
-static T *create_separate_data(void *src, int width, int height, int nChannels)
+static T *create_separate_data(const void *src, int width, int height, int nChannels)
 {
 	T *srcT = (T*)src;
 	T *dst = (T*)malloc(sizeof(T)*width*height*nChannels);
@@ -239,7 +239,7 @@ static T *create_separate_data(void *src, int width, int height, int nChannels)
 }
 
 
-static void *create_separate_data(void *src, int width, int height, int nChannels,
+static void *create_separate_data(const void *src, int width, int height, int nChannels,
 					  int type)
 {
 	if (type == TI_8U)
@@ -265,74 +265,9 @@ static void *create_separate_data(void *src, int width, int height, int nChannel
 	return 0;
 }
 
-int write_tiff2(const char *file, void *data, int width, int height, int nChannels,
+int write_tiff(const char *file, const void *data, int width, int height, int nChannels,
 			   int type, int flag)
 {
-	TIFF *tif = TIFFOpen(file, "wb");
-	if (!tif)
-	{
-		return 1;
-	}
-
-	if (nChannels == 1)
-	{
-		_write_tiff_onepage(tif, data, width, height, nChannels, type);
-	}
-	else if ( nChannels == 3 && (type == TI_8U || type == TI_16U ) )
-	{
-		if ((flag & 1) == 0)
-		{
-			//BGR data
-			void *rgbData = create_rgb_data(data, width, height, type);
-			_write_tiff_onepage(tif, rgbData, width, height, nChannels, type);
-			free(rgbData);
-		}
-		else
-		{
-			_write_tiff_onepage(tif, data, width, height, nChannels, type);
-		}
-	}
-	else
-	{
-		if ((nChannels == 3 && (type == TI_32S || type == TI_32F) && (flag &1) == 0))
-		{
-			//BGR -> RGB
-			for (int c = 0; c < 3; c++)
-			{
-				void *sep_data = create_one_channel_data(data, width, height, nChannels, type, 2-c);
-				_write_tiff_onepage(tif, sep_data, width, height, 1, type);
-				free(sep_data);
-				//for imagej to read multi page image as RGB image
-				const char *str  = "ImageJ=1.52d\nimages=3\nchannels=3\nhyperstack=true\nmode=composite\nloop=false";
-				TIFFSetField(tif, TIFFTAG_IMAGEDESCRIPTION, str);
-				TIFFWriteDirectory(tif);
-			}
-		}
-		else
-		{
-			//multichannel
-			for (int c = 0; c < nChannels; c++)
-			{
-				void *sep_data = create_one_channel_data(data, width, height, nChannels, type, c);
-				_write_tiff_onepage(tif, sep_data, width, height, 1, type);
-				free(sep_data);
-				TIFFWriteDirectory(tif);
-			}
-		}
-	}
-
-	TIFFClose(tif);
-	return 0;
-}
-
-int write_tiff(const char *file, void *data, int width, int height, int nChannels,
-			   int type, int flag)
-{
-	if ((flag == TI_BGR || flag == TI_RGB) && nChannels != 3)
-	{
-		return 1;
-	}
-
 	TIFF *tif = TIFFOpen(file, "wb");
 	if (!tif)
 	{
@@ -345,7 +280,7 @@ int write_tiff(const char *file, void *data, int width, int height, int nChannel
 		//write one page
 		_write_tiff_onepage(tif, data, width, height, nChannels, type);
 	}
-	else if (flag == TI_RGB)
+	else if (flag == TI_RGB && nChannels == 3)
 	{
 		if (type == TI_8U || type == TI_16U)
 		{
@@ -368,7 +303,7 @@ int write_tiff(const char *file, void *data, int width, int height, int nChannel
 			}
 		}
 	}
-	else if (flag == TI_BGR)
+	else if (flag == TI_BGR && nChannels == 3)
 	{
 		if (type == TI_8U || type == TI_16U)
 		{
