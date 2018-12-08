@@ -10,16 +10,23 @@
 #include "cv_tiff_imagej.h"
 
 
-int main()
+int main(int argc, char **argv)
 {
 
 	printf("tiff imagej test\n");
-	cv::Mat mat_8U_bgr = cv::imread("lena.png", 1);
+
+	if (argc == 1)
+	{
+		printf("no image file arg\n");
+		return 0;
+	}
+
+	cv::Mat mat_8U_bgr = cv::imread(argv[1], 1);
 
 	int w = mat_8U_bgr.cols;
 	int h = mat_8U_bgr.rows;
 	int c = mat_8U_bgr.channels();
-	printf("lena.png: w = %d h = %d c = %d\n", w, h, c);
+	printf("%s : w = %d h = %d c = %d\n", argv[1], w, h, c);
 
 	cv::Mat mat_16U_bgr, mat_32S_bgr, mat_32F_bgr, mat_64F_bgr;
 	mat_8U_bgr.convertTo(mat_16U_bgr, CV_16U, 65535./255.);
@@ -38,31 +45,31 @@ int main()
 	mat_8U_gray.convertTo(mat_64F_gray, CV_64F, 1./255.);
 
 	// write primitive function (tiff_image.h)
-	write_tiff("lena_8U_rgb.tiff", mat_8U_bgr.ptr(), w, h, c, TI_8U, TI_BGR);
-	write_tiff("lena_16U_rgb.tiff", mat_16U_bgr.ptr(), w, h, c, TI_16U, TI_BGR);
-	write_tiff("lena_32S_rgb.tiff", mat_32S_bgr.ptr(), w, h, c, TI_32S, TI_BGR);
-	write_tiff("lena_32F_rgb.tiff", mat_32F_bgr.ptr(), w, h, c, TI_32F, TI_BGR);
-	write_tiff("lena_64F_rgb.tiff", mat_64F_bgr.ptr(), w, h, c, TI_64F, TI_BGR);
+	write_tiff("out_8U_rgb.tiff", mat_8U_bgr.ptr(), w, h, c, TI_8U, TI_BGR);
+	write_tiff("out_16U_rgb.tiff", mat_16U_bgr.ptr(), w, h, c, TI_16U, TI_BGR);
+	write_tiff("out_32S_rgb.tiff", mat_32S_bgr.ptr(), w, h, c, TI_32S, TI_BGR);
+	write_tiff("out_32F_rgb.tiff", mat_32F_bgr.ptr(), w, h, c, TI_32F, TI_BGR);
+	write_tiff("out_64F_rgb.tiff", mat_64F_bgr.ptr(), w, h, c, TI_64F, TI_BGR);
 
-	write_tiff("lena_8U_gray.tiff", mat_8U_gray.ptr(), w, h, 1, TI_8U);
-	write_tiff("lena_16U_gray.tiff", mat_16U_gray.ptr(), w, h, 1, TI_16U);
-	write_tiff("lena_32S_gray.tiff", mat_32S_gray.ptr(), w, h, 1, TI_32S);
-	write_tiff("lena_32F_gray.tiff", mat_32F_gray.ptr(), w, h, 1, TI_32F);
-	write_tiff("lena_64F_gray.tiff", mat_64F_gray.ptr(), w, h, 1, TI_64F);
+	write_tiff("out_8U_gray.tiff", mat_8U_gray.ptr(), w, h, 1, TI_8U);
+	write_tiff("out_16U_gray.tiff", mat_16U_gray.ptr(), w, h, 1, TI_16U);
+	write_tiff("out_32S_gray.tiff", mat_32S_gray.ptr(), w, h, 1, TI_32S);
+	write_tiff("out_32F_gray.tiff", mat_32F_gray.ptr(), w, h, 1, TI_32F);
+	write_tiff("out_64F_gray.tiff", mat_64F_gray.ptr(), w, h, 1, TI_64F);
 
 
 	// write function for opencv (cv_tiff_image.h)
-	cv_write_tiff("cv_lena_8U_rgb.tiff", mat_8U_bgr);
-	cv_write_tiff("cv_lena_16U_rgb.tiff", mat_16U_bgr);
-	cv_write_tiff("cv_lena_32S_rgb.tiff", mat_32S_bgr);
-	cv_write_tiff("cv_lena_32F_rgb.tiff", mat_32F_bgr);
-	cv_write_tiff("cv_lena_64F_rgb.tiff", mat_64F_bgr);
+	cv_write_tiff("cv_8U_rgb.tiff", mat_8U_bgr);
+	cv_write_tiff("cv_16U_rgb.tiff", mat_16U_bgr);
+	cv_write_tiff("cv_32S_rgb.tiff", mat_32S_bgr);
+	cv_write_tiff("cv_32F_rgb.tiff", mat_32F_bgr);
+	cv_write_tiff("cv_64F_rgb.tiff", mat_64F_bgr);
 
-	cv_write_tiff("cv_lena_8U_gray.tiff", mat_8U_gray);
-	cv_write_tiff("cv_lena_16U_gray.tiff", mat_16U_gray);
-	cv_write_tiff("cv_lena_32S_gray.tiff", mat_32S_gray);
-	cv_write_tiff("cv_lena_32F_gray.tiff", mat_32F_gray);
-	cv_write_tiff("cv_lena_64F_gray.tiff", mat_64F_gray);
+	cv_write_tiff("cv_8U_gray.tiff", mat_8U_gray);
+	cv_write_tiff("cv_16U_gray.tiff", mat_16U_gray);
+	cv_write_tiff("cv_32S_gray.tiff", mat_32S_gray);
+	cv_write_tiff("cv_32F_gray.tiff", mat_32F_gray);
+	cv_write_tiff("cv_64F_gray.tiff", mat_64F_gray);
 
 	cv::Mat mat_32F_4C = cv::Mat(256, 256, CV_32FC4);
 
@@ -83,7 +90,7 @@ int main()
 				}
 			}
 		}
-		write_tiff("32FC4.tiff", ptr, 256, 256, 4, TI_32F);
+		write_tiff("out_32FC4.tiff", ptr, 256, 256, 4, TI_32F);
 		cv_write_tiff("cv_32FC4.tiff", mat_32F_4C);
 	}
 
