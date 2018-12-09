@@ -28,19 +28,20 @@ int main(int argc, char **argv)
 	int c = mat_8U_bgr.channels();
 	printf("%s : w = %d h = %d c = %d\n", argv[1], w, h, c);
 
+	////////////////
+	// creating images with types
+	////////////////
 	cv::Mat mat_16U_bgr, mat_32S_bgr, mat_32F_bgr, mat_64F_bgr;
-	mat_8U_bgr.convertTo(mat_16U_bgr, CV_16U, 65535./255.);
-	mat_8U_bgr.convertTo(mat_32S_bgr, CV_32S, 2147483647./255.);
+	mat_8U_bgr.convertTo(mat_16U_bgr, CV_16U, 100);
+	mat_8U_bgr.convertTo(mat_32S_bgr, CV_32S, 10000);
 	mat_8U_bgr.convertTo(mat_32F_bgr, CV_32F, 1./255.);
 	mat_8U_bgr.convertTo(mat_64F_bgr, CV_64F, 1./255.);
-
-	
 
 	cv::Mat mat_8U_gray, mat_16U_gray, mat_32S_gray, mat_32F_gray, mat_64F_gray;
 
 	cv::cvtColor(mat_8U_bgr, mat_8U_gray, CV_RGB2GRAY);
-	mat_8U_gray.convertTo(mat_16U_gray, CV_16U, 65535./255.);
-	mat_8U_gray.convertTo(mat_32S_gray, CV_32S, 2147483647./255.);
+	mat_8U_gray.convertTo(mat_16U_gray, CV_16U, 100);
+	mat_8U_gray.convertTo(mat_32S_gray, CV_32S, 10000);
 	mat_8U_gray.convertTo(mat_32F_gray, CV_32F, 1./255.);
 	mat_8U_gray.convertTo(mat_64F_gray, CV_64F, 1./255.);
 
