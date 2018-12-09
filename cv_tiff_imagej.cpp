@@ -2,7 +2,7 @@
 #include "cv_tiff_imagej.h"
 
 
-void cv_write_tiff(const char *file, const cv::Mat &img)
+void cv_write_tiff(const char *file, const cv::Mat &img, int flag)
 {
 	int cv_type = img.type();
 	int t = cv_type & CV_MAT_DEPTH_MASK;
@@ -31,12 +31,6 @@ void cv_write_tiff(const char *file, const cv::Mat &img)
 	else if (t == CV_64F)
 	{
 		type = TI_64F;
-	}
-
-	int flag = TI_GRAY;
-	if (c == 3)
-	{
-		flag = TI_BGR;
 	}
 
 	write_tiff(file, img.ptr(), width, height, c, type, flag);
