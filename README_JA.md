@@ -18,18 +18,57 @@ ImageJ用にTiffファイル出力を行うためのライブラリです。
 
 write_tiff(const char *file, const void *data, int width, int height, int nChannels,
 			   int type, int flag)
-         
-| name | description |
+
+```
+#include "tiff_imagej.cpp"
+
+...
+float *img_ptr = ....;
+int width = ...;
+int height = ...;
+int nChannels = 3;
+
+// インターリーブ形式の画素並び(BGRBGRBGR...)
+for (...) {
+   img_ptr[3*(x+y*width)+0] = Bval;
+   img_ptr[3*(x+y*width)+1] = Gval; 
+   img_ptr[3*(x+y*width)+1] = Rval; 
+}
+
+write_tiff("out.tiff", img_ptr, width, height, nChannnels, TI_32F, TI_RGB);
+```
+
+| 名前 | 説明 |
 ----|---- 
-| file | filename |
-| data | pointer of data. <br>Only interleaved is supported for a multi channel image. |
-| width | width of image |
-| nChannels | the number of channels |
-| type | type of image |
-| flag | to write image as color |
+| file | ファイル名 |
+| data | 画像データへのポインタ. <br> 2チャンネル以上の場合、インターリーブ形式のみ対応しています。 |
+| width | 画像幅 |
+| height | 画像高さ |
+| nChannels | チャンネル数 |
+| type | 画像の型（ビット深度） |
+| flag | フラグ（カラー画像用） |
+
+typeは画素の型を指定します。
+
+| 定数 | 説明 |
+---- | ----
+| TI_8U | 符号なし8ビット整数(unsigned char) |
+| TI_16U | 符号なし16ビット整数(unsigned short) |
+| TI_32S | 符号あり32ビット整数(int) |
+| TI_32F | 単精度浮動小数(float) |
+| TI_64F | 倍精度浮動小数(double) |
+
+flagはnChannels==3のときのみ適用されます。
+
+| 定数 | 説明 |
+---- | ----
+| TI_GRAY | グレースケール画像として出力します |
+| TI_16U | dataはRGB並びとしてカラー画像で出力します |
+| TI_32S | dataはBGR並びとしてカラー画像で出力します |
+
 
 ## Write cv::Mat as tiff file
-Use the following files.
+OpenCVのcv::MatをTiff出力します。以下のファイルを自分のプロジェクトで利用してください。
 - tiff_imagej.cpp
 - tiff_imagej.h
 - cv_tiff_imagej.cpp	
@@ -39,7 +78,18 @@ void cv_write_tiff(const char *file, const cv::Mat &img, int flag = TI_BGR)
 
 | name | description |
 ----|---- 
-| file | filename |
-| img | Mat object |
-| flag | to write image as color |
+| file | ファイル名 |
+| img | cv::Mat オブジェクト |
+| flag | フラグ（カラー画像用）  |
+
+```
+#include "cv_tiff_imagej.h"
+
+...
+
+cv::Mat img(width, height, CV_32FC3);
+...
+// OpenCVはBGR並びがデフォルトです。
+cv_write_tiff("out.tiff", img, TI_BGR); 
+```
 
