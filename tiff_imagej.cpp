@@ -265,13 +265,13 @@ static void *create_separate_data(const void *src, int width, int height, int nC
 	return 0;
 }
 
-int write_tiff(const char *file, const void *data, int width, int height, int nChannels,
+void write_tiff(const char *file, const void *data, int width, int height, int nChannels,
 			   int type, int flag)
 {
 	TIFF *tif = TIFFOpen(file, "wb");
 	if (!tif)
 	{
-		return 1;
+		return;
 	}
 
 
@@ -342,5 +342,5 @@ int write_tiff(const char *file, const void *data, int width, int height, int nC
 	}
 
 	TIFFClose(tif);
-	return 0;
+	return;
 }

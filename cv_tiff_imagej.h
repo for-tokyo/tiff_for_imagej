@@ -8,3 +8,4 @@
 #include "tiff_imagej.h"
 
 void cv_write_tiff(const char *file, const cv::Mat &img, int flag = TI_BGR);
+

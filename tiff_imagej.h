@@ -17,6 +17,6 @@
 #define TI_RGB	1
 #define TI_BGR	2
 
-int write_tiff(const char *file, const void *data, int width, int height, int nChannels,
+void write_tiff(const char *file, const void *data, int width, int height, int nChannels,
 			   int type, int flag = 0);
 

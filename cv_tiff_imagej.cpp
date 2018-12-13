@@ -1,6 +1,9 @@
-#include "tiff_imagej.h"
-#include "cv_tiff_imagej.h"
+/*
+	Copyright 2018-, Yuki TOKYO (@for-tokyo)
+	Licensed under Unlicense (http://unlicense.org)
+*/
 
+#include "cv_tiff_imagej.h"
 
 void cv_write_tiff(const char *file, const cv::Mat &img, int flag)
 {
