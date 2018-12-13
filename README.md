@@ -1,5 +1,5 @@
 # tiff_imagej
-[日本語REAME](https://github.com/for-tokyo/tiff_imagej/README_JA.md)
+[日本語REAME](https://github.com/for-tokyo/tiff_imagej/blob/master/README_JA.md)
 
 write a tiff file for imagej.
 
