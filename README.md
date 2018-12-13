@@ -1,9 +1,12 @@
 # tiff_imagej
+[日本語REAME](https://github.com/for-tokyo/tiff_imagej/README_JA.md)
+
 write a tiff file for imagej.
 
 This source code is licensed under [the Unlicens](http://unlicense.org/).
 
 You can use all or part of this source code without any constraints.
+
 
 ## Dependency
 - libtiff
@@ -42,4 +45,3 @@ void cv_write_tiff(const char *file, const cv::Mat &img, int flag = TI_BGR)
 | flag | to write image as color |
 
 
-[日本語REAME](https://github.com/for-tokyo/tiff_imagej/README_JA.md)
