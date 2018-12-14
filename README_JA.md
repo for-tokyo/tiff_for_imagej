@@ -16,9 +16,6 @@ ImageJ用にTiffファイル出力を行うためのライブラリです。
 - tiff_imagej.cpp
 - tiff_imagej.h	
 
-write_tiff(const char *file, const void *data, int width, int height, int nChannels,
-			   int type, int flag)
-
 ```
 #include "tiff_imagej.cpp"
 
@@ -37,6 +34,9 @@ for (...) {
 
 write_tiff("out.tiff", img_ptr, width, height, nChannnels, TI_32F, TI_RGB);
 ```
+write_tiff(const char *file, const void *data, int width, int height, int nChannels,
+			   int type, int flag)
+
 
 | 名前 | 説明 |
 ----|---- 
