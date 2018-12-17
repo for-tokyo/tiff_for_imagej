@@ -3,7 +3,8 @@
 	Licensed under Unlicense (http://unlicense.org)
 */
 
-#pragma once
+#ifndef TIFF_IMAGEJ_H_
+#define TIFF_IMAGEJ_H_
 
 //for type
 #define TI_8U	0
@@ -20,3 +21,4 @@
 void write_tiff(const char *file, const void *data, int width, int height, int nChannels,
 			   int type, int flag = 0);
 
+#endif // TIFF_IMAGEJ_H_
