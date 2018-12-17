@@ -37,8 +37,6 @@ static int get_bytes_per_channel(int type)
 static int _write_tiff_onepage(TIFF *tif, const void *data, int width, int height, int nChannels,
 							   int type)
 {
-	int row_strip;
-	int image_size;
 
 	TIFFSetField(tif, TIFFTAG_SUBFILETYPE, 0);
 	TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, width);
@@ -217,52 +215,6 @@ static T *create_separate_from_bgr(const void *src, int width, int height)
 		}
 	}
 	return dst;
-}
-
-template<typename T>
-static T *create_separate_data(const void *src, int width, int height, int nChannels)
-{
-	T *srcT = (T*)src;
-	T *dst = (T*)malloc(sizeof(T)*width*height*nChannels);
-	const int cOffset = width*height;
-	for (int y = 0; y < height; y++)
-	{
-		for (int x = 0; x < width; x++)
-		{
-			for (int c = 0; c < nChannels; c++)
-			{
-				dst[width*y+x+c*cOffset] = srcT[nChannels*(width*y+x)+c];
-			}
-		}
-	}
-	return dst;
-}
-
-
-static void *create_separate_data(const void *src, int width, int height, int nChannels,
-					  int type)
-{
-	if (type == TI_8U)
-	{
-		return create_separate_data<unsigned char>(src, width, height, nChannels);
-	}
-	else if (type == TI_16U)
-	{
-		return create_separate_data<unsigned short>(src, width, height, nChannels);
-	}
-	else if (type == TI_32S)
-	{
-		return create_separate_data<int>(src, width, height, nChannels);
-	}
-	else if (type == TI_32F)
-	{
-		return create_separate_data<float>(src, width, height, nChannels);
-	}
-	else if (type == TI_64F)
-	{
-		return create_separate_data<double>(src, width, height, nChannels);
-	}
-	return 0;
 }
 
 void write_tiff(const char *file, const void *data, int width, int height, int nChannels,
