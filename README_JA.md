@@ -63,8 +63,8 @@ flagはnChannels==3のときのみ適用されます。
 | 定数 | 説明 |
 ---- | ----
 | TI_GRAY | グレースケール画像として出力します |
-| TI_16U | dataはRGB並びとしてカラー画像で出力します |
-| TI_32S | dataはBGR並びとしてカラー画像で出力します |
+| TI_RGB | dataはRGB並びとしてカラー画像で出力します |
+| TI_BGR | dataはBGR並びとしてカラー画像で出力します |
 
 
 ## Write cv::Mat as tiff file
