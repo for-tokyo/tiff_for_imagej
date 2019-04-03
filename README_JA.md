@@ -29,10 +29,10 @@ int nChannels = 3;
 for (...) {
    img_ptr[3*(x+y*width)+0] = Bval;
    img_ptr[3*(x+y*width)+1] = Gval; 
-   img_ptr[3*(x+y*width)+1] = Rval; 
+   img_ptr[3*(x+y*width)+2] = Rval; 
 }
 
-write_tiff("out.tiff", img_ptr, width, height, nChannnels, TI_32F, TI_RGB);
+write_tiff("out.tiff", img_ptr, width, height, nChannnels, TI_32F, TI_BGR);
 ```
 write_tiff(const char *file, const void *data, int width, int height, int nChannels,
 			   int type, int flag)
